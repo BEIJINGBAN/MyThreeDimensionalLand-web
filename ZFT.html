@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Three.js Minimal MVP</title>
+    <style>body { margin: 0; overflow: hidden; }</style>
+    <!-- 1. 直接 CDN 引入 Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+</head>
+<div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
+    <button onclick="changeColor()">改变颜色</button>
+    <button onclick="moveCube()">移动位置</button>
+    <button onclick="moveBackCube()">返回初始位置</button>
+    <button onclick="responseBackCube(cubeSettings)">模拟后端请求</button>
+</div>
+<body>
+<script>
+    // 2. 初始化核心三大件：场景、相机、渲染器
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // 3. 创建数据实体：几何体 + 材质 = 网格
+    const geometry = new THREE.BoxGeometry();
+    // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+    // 1. 创建环境光（均匀照亮场景中的每一个面，没有方向，强度设为 0.3）
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+    
+    const cubeSettings = {
+        position: { x: 2,y: 1,z: 0},
+        color: "#ff8800"
+    };
+
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    camera.position.z = 5;
+    // camera.position.x = 5;
+    // 4. 渲染死循环（相当于后端的定时任务）
+    function animate() {
+        requestAnimationFrame(animate);
+        // 改变状态（旋转）
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        controls.update();
+        // 执行绘制
+        renderer.render(scene, camera);
+    }
+    animate();
+    // 1. 改变材质属性（将颜色随机切换）
+    function changeColor() {
+        const randomColor = Math.floor(Math.random() * 0xffffff);
+        cube.material.color.setHex(randomColor);
+    }
+
+    // 2. 改变空间坐标（将 X 轴坐标往右推 1 个单位）
+    function moveCube() {
+        cube.position.x += 1;
+        console.log(cube.position.x);
+    }
+    function moveBackCube() {
+        cube.position.x = 0;
+        cube.position.y = 0;
+        cube.position.z = 0;
+    }
+    function responseBackCube(settings) {
+        cube.position.x = settings.position.x;
+        cube.position.y = settings.position.y;
+        cube.position.z = settings.position.z;
+        cube.material.color.set(settings.color);
+    }
+</script>
+</body>
+</html>
