@@ -13,7 +13,7 @@
     <button onclick="changeColor()">改变颜色</button>
     <button onclick="moveCube()">移动位置</button>
     <button onclick="moveBackCube()">返回初始位置</button>
-    <button onclick="responseBackCube(cubeSettings)">模拟后端请求</button>
+    <button onclick="loadCubeSettings()">后端请求</button>
 </div>
 <body>
 <script>
@@ -78,6 +78,22 @@
         cube.position.y = settings.position.y;
         cube.position.z = settings.position.z;
         cube.material.color.set(settings.color);
+    }
+    async function loadCubeSettings() {
+        try{
+            const response = await fetch("http://localhost:8080/cube/get");
+
+            if(!response.ok){
+                throw new Error("请求失败，http状态码："+response.status);
+            }
+
+            const settings = await response.json();
+            console.log("后端返回的初始值",response);
+            console.log("后端返回的设置",settings);
+            responseBackCube(settings);
+        }catch(error){
+            console.log("加载设置失败：",error)
+        }
     }
 </script>
 </body>
