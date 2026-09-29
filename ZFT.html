@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Three.js Minimal MVP</title>
+    <title>My3DLand</title>
     <style>body { margin: 0; overflow: hidden; }</style>
     <!-- 1. 直接 CDN 引入 Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -23,56 +23,71 @@
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+   
 
-    // 3. 创建数据实体：几何体 + 材质 = 网格
-    const geometry = new THREE.BoxGeometry();
-    // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
-    const material = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+    
+    const seaGeometry = new THREE.PlaneGeometry(100,100);
+    const seaMaterial = new THREE.MeshStandardMaterial({
+        color: "#278eae"
+    });
+    const sea = new THREE.Mesh(seaGeometry,seaMaterial);
+    sea.rotation.x = -Math.PI /2;
+    sea.position.y = -0.3;
+    
 
+    const isLandGeometry = new THREE.CylinderGeometry(3,3.5,1,1000000);
+    const isLandMaterial = new THREE.MeshStandardMaterial({
+        color: "#8cab62"
+    });
+    const island = new THREE.Mesh(isLandGeometry,isLandMaterial);
+
+    const rainGeometry = new THREE.SphereGeometry(0.3,8,8);
+    const rainMaterial = new THREE.MeshStandardMaterial({
+        color: "#b9ddff"
+    });
+    const rain = new THREE.Mesh(rainGeometry,rainMaterial);
+    rain.position.x = 5;
+    rain.position.y = 5;
+    
+    scene.add(island);
+    scene.add(sea);
+    scene.add(rain);
+   
+    camera.position.set(5,4,5);
+    
+    
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(5, 5, 5);
-    scene.add(light);
-    // 1. 创建环境光（均匀照亮场景中的每一个面，没有方向，强度设为 0.3）
+    // 1.环境光
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-    scene.add(ambientLight);
     
-    const cubeSettings = {
-        position: { x: 2,y: 1,z: 0},
-        color: "#ff8800"
-    };
+    scene.add(ambientLight);
+    scene.add(light);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    camera.position.z = 5;
-    // camera.position.x = 5;
-    // 4. 渲染死循环（相当于后端的定时任务）
+    const clock = new THREE.clock();
+
+    // 4. 渲染死循环
     function animate() {
         requestAnimationFrame(animate);
-        // 改变状态（旋转）
-        cube.rotation.x += 0.01;
-        cube.rotation.y += 0.01;
+            
+        rain.position.x-=0.1;
+        rain.position.y-=0.1;
         controls.update();
-        // 执行绘制
         renderer.render(scene, camera);
+
+        if(rain.position.y <= 0){
+            rain.position.y = 18;
+            rain.position.x = 8;
+        }
     }
     animate();
     // 1. 改变材质属性（将颜色随机切换）
     function changeColor() {
         const randomColor = Math.floor(Math.random() * 0xffffff);
-        cube.material.color.setHex(randomColor);
+        island.material.color.setHex(randomColor);
     }
 
-    // 2. 改变空间坐标（将 X 轴坐标往右推 1 个单位）
-    function moveCube() {
-        cube.position.x += 1;
-        console.log(cube.position.x);
-    }
-    function moveBackCube() {
-        cube.position.x = 0;
-        cube.position.y = 0;
-        cube.position.z = 0;
-    }
     function responseBackCube(settings) {
         cube.position.x = settings.position.x;
         cube.position.y = settings.position.y;
