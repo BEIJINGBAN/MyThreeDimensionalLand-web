@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2430房间分区示意</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 30px;
+  background: #f3f3f3;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #222;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.desc {
+  text-align: center;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+/* 整套房 */
+.house {
+  width: min(920px, 95vw);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* 主起居空间 */
+.main-room {
+  position: relative;
+  width: 760px;
+  max-width: 100%;
+  height: 470px;
+  background: #fffdf7;
+  border: 5px solid #444;
+}
+
+/* 厨房走廊形成L型 */
+.kitchen-wing {
+  position: relative;
+  width: 280px;
+  height: 470px;
+  background: #f8f4ea;
+  border-left: 5px solid #444;
+  border-right: 5px solid #444;
+  border-bottom: 5px solid #444;
+}
+
+/* 门 */
+.entrance {
+  position: absolute;
+  left: 8px;
+  bottom: 5px;
+  width: 85px;
+  height: 18px;
+  background: #9b6a45;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* 家具通用 */
+.item {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* 床 */
+.bed {
+  left: 65px;
+  top: 50px;
+  width: 265px;
+  height: 180px;
+  background: #e4ded4;
+  border: 2px solid #9a9186;
+}
+
+/* 半隔断 */
+.divider {
+  position: absolute;
+  left: 335px;
+  top: 72px;
+  width: 28px;
+  height: 145px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #a27c56 0,
+      #a27c56 5px,
+      transparent 5px,
+      transparent 11px
+    );
+  border: 1px solid #906b49;
+}
+
+.divider-label {
+  position: absolute;
+  left: 305px;
+  top: 225px;
+  width: 100px;
+  text-align: center;
+  font-size: 12px;
+  color: #86674a;
+}
+
+/* 工作桌 */
+.desk {
+  left: 65px;
+  bottom: 48px;
+  width: 210px;
+  height: 82px;
+  background: #cda979;
+  border: 2px solid #927553;
+}
+
+/* 沙发 */
+.sofa {
+  right: 55px;
+  top: 110px;
+  width: 230px;
+  height: 105px;
+  background: #cfb89c;
+  border: 2px solid #9b866f;
+}
+
+/* 小茶几 */
+.table {
+  right: 120px;
+  top: 250px;
+  width: 95px;
+  height: 55px;
+  border-radius: 50%;
+  background: #c99863;
+}
+
+/* 地毯 */
+.rug {
+  right: 45px;
+  top: 82px;
+  width: 275px;
+  height: 250px;
+  border: 2px dashed #aaa;
+  background: rgba(220, 210, 190, 0.25);
+  z-index: 0;
+}
+
+.sofa,
+.table {
+  z-index: 2;
+}
+
+/* 阳台 */
+.balcony {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 310px;
+  height: 90px;
+  border-left: 4px solid #555;
+  border-top: 4px solid #555;
+  background: #e8f3ed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #486b5b;
+  font-weight: bold;
+}
+
+/* 区域文字 */
+.zone {
+  position: absolute;
+  font-size: 13px;
+  color: #777;
+}
+
+.sleep-zone {
+  left: 140px;
+  top: 18px;
+}
+
+.work-zone {
+  left: 120px;
+  bottom: 18px;
+}
+
+.relax-zone {
+  right: 120px;
+  top: 42px;
+}
+
+/* 厨房区 */
+.kitchen-counter {
+  position: absolute;
+  right: 25px;
+  top: 60px;
+  width: 95px;
+  height: 240px;
+  background: #dfc9a6;
+  border: 2px solid #9f8968;
+}
+
+.fridge {
+  position: absolute;
+  right: 25px;
+  bottom: 55px;
+  width: 95px;
+  height: 110px;
+  background: #cbd7dc;
+  border: 2px solid #87969d;
+}
+
+.washer {
+  position: absolute;
+  left: 28px;
+  top: 190px;
+  width: 82px;
+  height: 82px;
+  border-radius: 10px;
+  background: #ddd;
+  border: 2px solid #999;
+}
+
+.toilet {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  width: 90px;
+  height: 120px;
+  background: #dcebf0;
+  border: 2px solid #88a4ad;
+}
+
+.arrow {
+  width: 280px;
+  margin: 10px 0;
+  text-align: center;
+  color: #888;
+  font-size: 13px;
+}
+
+.legend {
+  width: min(920px, 95vw);
+  margin: 25px auto;
+  background: white;
+  padding: 18px 22px;
+  border-radius: 12px;
+  line-height: 1.8;
+}
+
+.legend b {
+  display: inline-block;
+  min-width: 130px;
+}
+
+@media (max-width: 850px) {
+  .house {
+    transform-origin: top left;
+    transform: scale(.75);
+    margin-bottom: -180px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>2430 元 L 型开间 · 分区示意</h1>
+<div class="desc">
+  核心思路：不硬隔成“一室一厅”，而是让睡觉、办公、休息形成三个心理区域
+</div>
+
+<div class="house">
+
+  <!-- 主空间 -->
+  <div class="main-room">
+
+    <div class="zone sleep-zone">睡眠区</div>
+    <div class="zone work-zone">工作 / 游戏区</div>
+    <div class="zone relax-zone">休闲区</div>
+
+    <div class="item bed">
+      床<br>
+      只负责睡觉
+    </div>
+
+    <!-- 小型透空隔断 -->
+    <div class="divider"></div>
+    <div class="divider-label">
+      60～80cm<br>
+      透空隔断
+    </div>
+
+    <div class="item desk">
+      电脑桌<br>
+      工作 / 学习 / 游戏
+    </div>
+
+    <div class="rug"></div>
+
+    <div class="item sofa">
+      沙发<br>
+      刷视频 / 吃东西 / 发呆
+    </div>
+
+    <div class="item table">
+      小边几
+    </div>
+
+    <div class="balcony">
+      阳台 · 晾衣服 / 透气 / 少量储物
+    </div>
+
+  </div>
+
+  <div class="arrow">
+    ↑ L 型转角：从厨房进入主空间
+  </div>
+
+  <!-- L型厨房 -->
+  <div class="kitchen-wing">
+
+    <div class="entrance">入户门</div>
+
+    <div class="item toilet">
+      卫生间
+    </div>
+
+    <div class="item washer">
+      洗衣机
+    </div>
+
+    <div class="item kitchen-counter">
+      厨房台面<br><br>
+      电磁炉<br>
+      电饭锅<br>
+      空气炸锅
+    </div>
+
+    <div class="item fridge">
+      冰箱<br>
+      （不够就补一台）
+    </div>
+
+  </div>
+
+</div>
+
+<div class="legend">
+
+  <p><b>① 床：</b>
+    保留在靠里面的位置，不让它成为整个房间的视觉中心。
+  </p>
+
+  <p><b>② 半隔断：</b>
+    只遮床的一部分，推荐 60～80cm 宽的木格栅、开放架或者轻屏风。
+    不要做整面墙，否则房间会立刻显小。
+  </p>
+
+  <p><b>③ 书桌：</b>
+    放在进主空间后首先接触的位置。
+    回家之后先看到电脑桌，而不是床。
+  </p>
+
+  <p><b>④ 沙发：</b>
+    靠阳台做真正的休闲区。
+    不想学习、不想睡觉的时候，还有第三个地方可以待。
+  </p>
+
+  <p><b>⑤ 阳台：</b>
+    尽量保持空。
+    不建议堆大量纸箱和杂物，否则会削弱整个房子的空间感。
+  </p>
+
+  <p><b>⑥ 厨房：</b>
+    L 型户型本身已经把厨房和睡眠区隔开了，这是这套房相较普通开间很大的优势。
+  </p>
+
+</div>
+
+</body>
+</html>
